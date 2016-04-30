@@ -1,4 +1,5 @@
 System.config({
+  baseURL: "/",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -17,8 +18,9 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "core-js": "npm:core-js@1.2.6",
     "jquery": "npm:jquery@2.2.3",
-    "react": "npm:react@15.0.2",
-    "react-dom": "npm:react-dom@15.0.2",
+    "lodash": "npm:lodash@4.11.1",
+    "react": "npm:react@15.0.1",
+    "react-dom": "npm:react-dom@15.0.1",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -134,6 +136,10 @@ System.config({
       "node-fetch": "npm:node-fetch@1.5.1",
       "whatwg-fetch": "npm:whatwg-fetch@1.0.0"
     },
+    "npm:lodash@4.11.1": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:loose-envify@1.1.0": {
       "js-tokens": "npm:js-tokens@1.0.3",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -171,10 +177,10 @@ System.config({
     "npm:punycode@1.3.2": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:react-dom@15.0.2": {
-      "react": "npm:react@15.0.2"
+    "npm:react-dom@15.0.1": {
+      "react": "npm:react@15.0.1"
     },
-    "npm:react@15.0.2": {
+    "npm:react@15.0.1": {
       "fbjs": "npm:fbjs@0.8.1",
       "loose-envify": "npm:loose-envify@1.1.0",
       "object-assign": "npm:object-assign@4.0.1",

@@ -1,3 +1,3 @@
 'use strict';
 
-import './app';
+import './app2';
