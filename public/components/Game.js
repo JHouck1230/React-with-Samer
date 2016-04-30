@@ -27,10 +27,10 @@ class Game extends React.Component {
 		this.state = {
 			correctGuesses: [],
 			incorrectGuesses: [],
+			currentState: 'ready'
 		};
 	}
 	recordGuess(cellId, correct) {
-		console.log(cellId, correct);
 		let { correctGuesses, incorrectGuesses } = this.state;
 
 		if(correct) {
@@ -39,11 +39,37 @@ class Game extends React.Component {
 			incorrectGuesses.push(cellId);
 		}
 
-		this.setState({ correctGuesses, incorrectGuesses });
+		this.setState({ correctGuesses, incorrectGuesses }, () => {
+			this.checkFinalState();
+		});
 	}
-  render() {
-    return (
 
+	checkFinalState() {
+		let { currentState, incorrectGuesses, correctGuesses } = this.state;
+		if(this.state.incorrectGuesses.length === 3) {
+			currentState = 'over';
+		}
+		if(this.state.correctGuesses.length === 6) {
+			currentState = 'won';
+		}
+		this.setState({currentState});
+	}
+
+	componentDidMount() {
+		setTimeout(() => {
+			this.memorizeTimerId = this.setState({currentState: 'memorize'});
+			setTimeout(() => {
+				this.recallTimerId = this.setState({currentState: 'recall'});
+			}, 2000);
+		}, 2000);
+	}
+  shouldHighlight() {
+  	return ['memorize', 'over'].indexOf(this.state.currentState) >= 0 ;
+  }
+  render() {
+  	const shouldHighlight = this.shouldHighlight();
+  	const canGuess = this.state.currentState === 'recall';
+    return (
       <div className="game">
 
       {this.grid.map((row, index) => (
@@ -51,10 +77,15 @@ class Game extends React.Component {
           {row.map(col => 
           	<Cell key={col} id={col} 
 									recordGuess={this.recordGuess.bind(this)}
+									shouldHighlight={shouldHighlight}
+									canGuess={canGuess}
 			          	{...this.state}
 			          	randomCells={this.randomCells} />)}
         </Row>
       ))}
+
+      {this.state.currentState}
+
       </div>
     );
   }
