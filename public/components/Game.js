@@ -22,12 +22,13 @@ class Game extends React.Component {
       this.grid.push(row);
     }
 
-    this.randomCells = sampleSize(flatten(this.grid), 6);
+    this.randomCells = sampleSize(flatten(this.grid), this.props.numberOfGuesses);
 
 		this.state = {
 			correctGuesses: [],
 			incorrectGuesses: [],
-			currentState: 'ready'
+			currentState: 'ready',
+			remainingSeconds: ''
 		};
 	}
 	recordGuess(cellId, correct) {
@@ -43,28 +44,52 @@ class Game extends React.Component {
 			this.checkFinalState();
 		});
 	}
-
+	finishGame() {
+		clearTimeout(this.memorizeTimerId);
+		clearTimeout(this.recallTimerId);
+		clearInterval(this.remainingSecondsIntervalId);
+	}
 	checkFinalState() {
 		let { currentState, incorrectGuesses, correctGuesses } = this.state;
 		if(this.state.incorrectGuesses.length === 3) {
 			currentState = 'over';
+			this.finishGame();
 		}
-		if(this.state.correctGuesses.length === 6) {
+		if(this.state.correctGuesses.length === this.props.numberOfGuesses) {
 			currentState = 'won';
+			this.finishGame();
 		}
 		this.setState({currentState});
 	}
 
 	componentDidMount() {
-		setTimeout(() => {
-			this.memorizeTimerId = this.setState({currentState: 'memorize'});
-			setTimeout(() => {
-				this.recallTimerId = this.setState({currentState: 'recall'});
+		this.memorizeTimerId = setTimeout(() => {
+			this.setState({currentState: 'memorize'});
+			this.recallTimerId = setTimeout(() => {
+				this.setState({currentState: 'recall', remainingSeconds: 10});
+				this.remainingSecondsIntervalId = setInterval(() => {
+						let { currentState, remainingSeconds } = this.state;
+						if(remainingSeconds === 1) {
+							currentState = 'over';
+							this.finishGame();
+						}
+						this.setState({
+							remainingSeconds: remainingSeconds - 1,
+							currentState});
+				}, 1000)
 			}, 2000);
 		}, 2000);
 	}
+	componentWillUnmount() {
+		this.finishGame();
+	}
   shouldHighlight() {
-  	return ['memorize', 'over'].indexOf(this.state.currentState) >= 0 ;
+  	return ['memorize', 'over'].indexOf(this.state.currentState) >= 0;
+  }
+  displayResetButton() {
+  	if(['won', 'over'].indexOf(this.state.currentState) >= 0 ) {
+  		return <button onClick={this.props.resetGame}>Play Again</button>;
+  	}
   }
   render() {
   	const shouldHighlight = this.shouldHighlight();
@@ -84,8 +109,9 @@ class Game extends React.Component {
         </Row>
       ))}
 
-      {this.state.currentState}
-
+      <div>{this.state.currentState}</div>
+      <div>{this.state.remainingSeconds}</div>
+      {this.displayResetButton()}
       </div>
     );
   }
