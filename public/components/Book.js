@@ -11,7 +11,7 @@ class Book extends React.Component {
 	}
 	render() {
 		return (
-			<li>
+			<li onClick={this.props.removeItem.bind(null, this.props.id)}>
 				{this.props.id} : {this.props.name} 
 
 				{this.priceDisplay()}

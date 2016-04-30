@@ -8,7 +8,8 @@ class List extends React.Component {
 		return (
 			<div>
 				<ul>
-					{this.props.items.map(item => <Component key = {item.id} {...item} />)}
+					{this.props.items.map(item => 
+						<Component key = {item.id} {...item} removeItem = {this.props.removeItem} />)}
 				</ul>
 			</div>
 		);
