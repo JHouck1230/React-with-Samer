@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React</title>
+	<script src="jspm_packages/system.js"></script>
+	<script src="config.js"></script>
+	<style>
+		.cell {
+	    height: 15vw;
+	    width: 15vw;
+	    border: 1px solid #777;
+	    display: inline-block;
+	    margin-right: 4px;
+	    cursor: pointer;
+		}
+		.active {
+			background-color: #9d9df3;
+		}
+		.correct {
+			background-color: green;
+		}
+		.incorrect {
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<div id="react">Loading...</div>
+	<script>
+		System.import('main.js');
+	</script>
+</body>
+</html>
